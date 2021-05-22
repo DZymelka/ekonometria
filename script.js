@@ -87,12 +87,13 @@ function calculate(){
     let macierzX_srednia = [];
     let macierzY_srednia = oblicz_srednia(macierzY);
     macierzX.forEach(function (item, index, object) {
-        macierzX_srednia[index] = oblicz_srednia(item).toFixed(2);
+        macierzX_srednia.push(oblicz_srednia(item).toFixed(2));
     });
     
     //Odchylenie standardowe
-    macierzX_wariancja = oblicz_wariancja(macierzX_srednia, macierzX);
-    macierzX_odchylenie = oblicz_odchylenie(macierzX_wariancja, macierzX);
+
+    macierzX_wariancja = oblicz_wariancja(macierzX_srednia);
+    macierzX_odchylenie = oblicz_odchylenie(macierzX_wariancja);
 
     //Współczynnik zmiennej zmiennych objaśniejących
     macierzX_wsp_zmien = [];
@@ -116,26 +117,27 @@ function oblicz_srednia(tablica) {
 
 }
 
-function oblicz_wariancja(wartosc_srednia,macierz) {
+function oblicz_wariancja(wartosc_srednia) {
     let wartosc_wariancja = [];
-    for (i = 0; i < macierz.length; i++)
+
+    for (i = 0; i < macierzX.length; i++)
     {
         wartosc_wariancja[i] = 0;
-        for (j = 0; j < macierzX.length; j++)
-        {
-            wartosc_wariancja[i] += Math.pow((macierz[i][j] - wartosc_srednia[i]),2);
+        for (j = 0; j < macierzX[i].length; j++)
+        {   
+            wartosc_wariancja[i] += Math.pow((macierzX[i][j] - wartosc_srednia[i]),2);
             
         }
         
-        wartosc_wariancja[i] /= 9;
+        wartosc_wariancja[i] /= (macierzX[i].length - 1);
     }
     return wartosc_wariancja;
 }
 
-function oblicz_odchylenie(wariancja, macierz) {
+function oblicz_odchylenie(wariancja) {
     let wartosc_odchylenia = [];
 
-    for (i = 0; i < macierz.length; i++)
+    for (i = 0; i < macierzX.length; i++)
     {
         wartosc_odchylenia[i] = Math.sqrt(wariancja[i]);
     }
