@@ -193,10 +193,10 @@ function oblicz_wsp_kor_r0(){
         let m2 = 0;
 
         macierzX_srednia = oblicz_srednia(macierzX[i] ).toFixed(2);
-        for(j = 0; j < macierzX.length; j++){
+        for(j = 0; j < macierzX[i].length; j++){
             licznik += (macierzX[i][j] - macierzX_srednia) * (macierzY[j] - macierzY_srednia);
         }
-        for(j = 0; j < macierzX.length; j++){
+        for(j = 0; j < macierzX[i].length; j++){
             m1 += Math.pow((macierzX[i][j] - macierzX_srednia),2);
             m2 += Math.pow((macierzY[j]  - macierzY_srednia),2);
         }
