@@ -3,6 +3,9 @@ let macierzX = [];
 let macierzX2 = [];
 let macierzY = [];
 
+let tabela_wsp_kor_r0 = [];
+let tabela_wsp_kor_r = [];
+
 function onFileLoad(event) {
     // document.getElementById(elementId).innerText = event.target.result;
     let textByLine = event.target.result.split('\n')
@@ -106,10 +109,14 @@ function calculate(){
     tabela_wsp_kor_r0 = oblicz_wsp_kor_r0(macierzY_srednia, macierzX_srednia);
 
     //R - współczynnik korelacji
-    tabela_wsp_kor_r0 = oblicz_wsp_kor_r(macierzY_srednia, macierzX_srednia);
-    console.log(tabela_wsp_kor_r0)
+    tabela_wsp_kor_r = oblicz_wsp_kor_r(macierzY_srednia, macierzX_srednia);
+
+    // Metoda współczynników korelacji wielorakiej (Pawłowskiego)
+    restult = oblicz_wsp_korelacji_wielorakiej();
+    console.log(restult)
 }
 
+//Podstawy R, R0 itp
 function oblicz_srednia(tablica) {
     let sum = 0;
     for( var i = 0; i < tablica.length; i++ ){
@@ -244,7 +251,83 @@ function oblicz_wsp_kor_r(){
     }
     return wsp_kor_r;
 }
+//(koniec) Podstawy R, R0 itp
 
+//Metoda współczynników korelacji wielorakiej (Pawłowskiego)
+
+function oblicz_wsp_korelacji_wielorakiej(){
+    // K1 = X1,  X2
+    let K = [], R = [], W = [], detW = [], detR = [];
+    K[0] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[1]];
+    K[1] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[2]];
+    K[2] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[3]];
+    K[3] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[2]];
+    K[4] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[3]];
+    K[5] = [tabela_wsp_kor_r0[2], tabela_wsp_kor_r0[3]];
+
+    
+    R[0] = [[1, tabela_wsp_kor_r[0][1]], [tabela_wsp_kor_r[0][1], 1]];
+    R[1] = [[1, tabela_wsp_kor_r[0][2]], [tabela_wsp_kor_r[0][2], 1]];
+    R[2] = [[1, tabela_wsp_kor_r[0][3]], [tabela_wsp_kor_r[0][3], 1]];
+    R[3] = [[1, tabela_wsp_kor_r[1][2]], [tabela_wsp_kor_r[1][2], 1]];
+    R[4] = [[1, tabela_wsp_kor_r[1][3]], [tabela_wsp_kor_r[1][3], 1]];
+    R[5] = [[1, tabela_wsp_kor_r[2][3]], [tabela_wsp_kor_r[2][3], 1]];
+
+
+    W[0] = [[1, K[0][0], K[0][1]], [K[0][0], 1, R[0][0][1]], [K[0][1], R[0][0][1], 1]];
+    W[1] = [[1, K[1][0], K[1][1]], [K[1][0], 1, R[1][0][1]], [K[1][1], R[1][0][1], 1]];
+    W[2] = [[1, K[2][0], K[2][1]], [K[2][0], 1, R[2][0][1]], [K[2][1], R[2][0][1], 1]];
+    W[3] = [[1, K[3][0], K[3][1]], [K[3][0], 1, R[3][0][1]], [K[3][1], R[3][0][1], 1]];
+    W[4] = [[1, K[4][0], K[4][1]], [K[4][0], 1, R[4][0][1]], [K[4][1], R[4][0][1], 1]];
+    W[5] = [[1, K[5][0], K[5][1]], [K[5][0], 1, R[5][0][1]], [K[5][1], R[5][0][1], 1]];
+
+    
+    for(let i = 0; i < R.length; i++) {
+        detR[i] = Math.abs(oblicz_wyznacznik(R[i], R[i].length));
+    }
+
+    for(let i = 0; i < W.length; i++){
+        detW[i] = Math.abs(oblicz_wyznacznik(W[i], W[i].length));
+    }
+
+    //Współczynnik korelacji
+    let E = [];
+
+    for(let i = 0; i < W.length; i++){
+        E[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
+    }
+
+    let wskaznik = E.indexOf(Math.max(...E));
+
+    return wskaznik;
+}
+
+function oblicz_wyznacznik(macierz, n){
+    let det = 0;
+    let submatrix = [];
+    for(let i = 0; i < n; i++) submatrix[i] = [];
+
+    if (n == 2)
+        return ((macierz[0][0] * macierz[1][1]) - (macierz[1][0] * macierz[0][1]));
+    else {
+        for (let x = 0; x < n; x++) {
+            let subi = 0;
+            for (let i = 1; i < n; i++) {
+                let subj = 0;
+                for (let j = 0; j < n; j++) {
+                    if (j == x)
+                    continue;
+                    submatrix[subi][subj] = macierz[i][j];
+                    subj++;
+                }
+                subi++;
+            }
+            det = det + (Math.pow(-1, x) * macierz[0][x] * oblicz_wyznacznik( submatrix, n - 1 ));
+        }
+    }
+    return det;
+}
+//(koniec)Metoda współczynników korelacji wielorakiej (Pawłowskiego)
 
 function onChooseFile(event, onLoadFileHandler) {
     if (typeof window.FileReader !== 'function')
