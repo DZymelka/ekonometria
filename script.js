@@ -122,27 +122,27 @@ function calculate(){
 
     switch (wskaznik) {
         case 0:
-            kluczX = [macierzX[0], macierzX[1], macierz1] ;
+            X = [macierzX[0], macierzX[1], macierz1] ;
             klucz = [0, 1];
             break;
         case 1:
-            kluczX = [macierzX[0], macierzX[2], macierz1];
+            X = [macierzX[0], macierzX[2], macierz1];
             klucz = [0, 2];
             break;
         case 2:
-            kluczX = [macierzX[0], macierzX[3], macierz1];
+            X = [macierzX[0], macierzX[3], macierz1];
             klucz = [0, 3];
             break;
         case 3:
-            kluczX = [macierzX[1], macierzX[2], macierz1];
+            X = [macierzX[1], macierzX[2], macierz1];
             klucz = [1, 2];
             break;
         case 4:
-            kluczX = [macierzX[1], macierzX[3], macierz1];
+            X = [macierzX[1], macierzX[3], macierz1];
             klucz = [1, 3];
             break;
         case 5:
-            kluczX = [macierzX[2], macierzX[3], macierz1];
+            X = [macierzX[2], macierzX[3], macierz1];
             klucz = [2, 3];
             break;
         default:
@@ -150,9 +150,9 @@ function calculate(){
             break;
     }
 
-    XT = math.transpose(kluczX);
+    XT = math.transpose(X);
 
-    let XTX = iloczyn_macierzy(kluczX, XT);
+    let XTX = iloczyn_macierzy(X, XT);
 
     let XTX_odw = math.inv([[XTX[0][0], XTX[0][1], XTX[0][2]],
                     [XTX[1][0], XTX[1][1], XTX[1][2]],
@@ -160,11 +160,22 @@ function calculate(){
 
     let YT = math.transpose(macierzY);
 
-    let XTY = iloczyn_macierzy(kluczX, macierzY);
+    let XTY = iloczyn_macierzy(X, macierzY);
 
     let KMNK = iloczyn_macierzy(XTX_odw, XTY)
 
     console.log(`Y = ${KMNK[0][0]} * X${klucz[0]+1} + ${KMNK[1][0]} * X${klucz[1]+1} + ${KMNK[2][0]}`)
+
+    // Odchylenei standardowe składnika resztowego
+    to_pierwsze = math.multiply(macierzY, YT);  
+    to_drugie = math.multiply(X, YT);  
+    to_trzecie = math.multiply([KMNK[0][0], KMNK[1][0], KMNK[2][0]], to_drugie);
+    to_czwarte =   Math.abs(to_trzecie - to_pierwsze);
+    to_piate = to_czwarte/7;
+
+    let odchyl_stand_sk_reszt = Math.sqrt(to_piate);
+
+    console.log(odchyl_stand_sk_reszt);
     
 }
 
