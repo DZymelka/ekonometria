@@ -1,0 +1,30 @@
+body {
+
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.matrixContent{
+    visibility: hidden;
+    width: 100%;
+    min-height: 300px;
+    /* border-style: double; */
+}
+
+.matrixTable{
+    width:100%; 
+    min-height: 300px;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.matrixTable th {
+    background-color: #d2d2d2;
+    vertical-align: top;
+    text-align: center;
+}
+.matrixTable td {
+    text-align: center;
+}
