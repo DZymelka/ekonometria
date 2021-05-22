@@ -105,7 +105,9 @@ function calculate(){
     //R0 - współczynnik korelacji
     tabela_wsp_kor_r0 = oblicz_wsp_kor_r0(macierzY_srednia, macierzX_srednia);
 
-    console.log(tabela_wsp_kor_r0);
+    //R - współczynnik korelacji
+    tabela_wsp_kor_r0 = oblicz_wsp_kor_r(macierzY_srednia, macierzX_srednia);
+    console.log(tabela_wsp_kor_r0)
 }
 
 function oblicz_srednia(tablica) {
@@ -203,6 +205,42 @@ function oblicz_wsp_kor_r0(){
 
         mianownik = Math.sqrt(m1 * m2);
         wsp_kor_r[i] = licznik / mianownik;
+    }
+    return wsp_kor_r;
+}
+
+function oblicz_wsp_kor_r(){
+    let wsp_kor_r = [];
+    macierzX_srednia = [];
+    macierzY_srednia = oblicz_srednia(macierzY);
+    
+    for (i = 0; i < macierzX.length; i++)
+    {
+        wsp_kor_r[i] = [];
+        macierz1_srednia = oblicz_srednia(macierzX[i] ).toFixed(2);
+        
+        for (j = 0; j < macierzX.length; j++)
+        {
+            macierz2_srednia = oblicz_srednia(macierzX[j] ).toFixed(2);
+            let licznik = 0;
+            let m1 = 0;
+            let m2 = 0;
+
+            for (k = 0; k < macierzX[i].length; k++){
+                licznik += (macierzX[i][k] - macierz1_srednia) * (macierzX[j][k] - macierz2_srednia);
+            }
+
+            for (k = 0; k < macierzX[i].length; k++){
+                m1 += Math.pow((macierzX[i][k] - macierz1_srednia),2);
+                m2 += Math.pow((macierzX[j][k]  - macierz2_srednia),2);
+            }
+            
+            mianownik = Math.sqrt(m1 * m2);  
+
+            wsp_kor_r[i][j] = licznik / mianownik;
+            if( i == j ) wsp_kor_r[i][j] = licznik / mianownik;
+
+        }
     }
     return wsp_kor_r;
 }
