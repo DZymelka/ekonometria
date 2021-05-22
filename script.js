@@ -162,49 +162,10 @@ function calculate(){
 
     let XTY = iloczyn_macierzy(kluczX, macierzY);
 
+    let KMNK = iloczyn_macierzy(XTX_odw, XTY)
 
-    console.log(kluczX.length);
-    console.log(XTY);
+    console.log(`Y = ${KMNK[0][0]} * X${klucz[0]+1} + ${KMNK[1][0]} * X${klucz[1]+1} + ${KMNK[2][0]}`)
     
-}
-
-function iloczyn_macierzy(matrixA, matrixB) {
-    let bCols = 10;
-    if(matrixB[0].length == undefined ) bCols = 3;
-    else bCols = matrixB[0].length;
-    
-    let matrixResult = [];
-
-    for (var r = 0; r < matrixA.length; ++r) {
-        matrixResult[r] = [];
-        for (var c = 0; c < bCols; ++c) {
-            matrixResult[r][c] = 0;
-            for (var i = 0; i < matrixA[0].length; ++i) {
-                if(matrixB[0].length != undefined ) 
-                    matrixResult[r][c] += matrixA[r][i] * matrixB[i][c];
-                else matrixResult[r][c] += matrixA[r][i] * matrixB[i];
-            }
-        }
-    }
-    return matrixResult;
-}
-
-function iloczyn_macierzy2(matrixA, matrixB) {
-    let aNumRows = matrixA.length, aNumCols = matrixA[0].length,
-        bNumRows = matrixB.length, bNumCols = matrixB[0].length;
-    let matrixResult = [];
-
-    for (var r = 0; r < aNumRows; ++r) {
-        matrixResult[r] = [];
-        for (var c = 0; c < 10; ++c) {
-            matrixResult[r][c] = 0;
-            for (var i = 0; i < aNumCols; ++i) {
-                matrixResult[r][c] += matrixA[r][i] * matrixB[i];
-            }
-        }
-    }
-    console.log(matrixResult);
-    return matrixResult;
 }
 
 //Podstawy R, R0 itp
@@ -419,6 +380,29 @@ function oblicz_wyznacznik(macierz, n){
     return det;
 }
 //(koniec)Metoda współczynników korelacji wielorakiej (Pawłowskiego)
+
+
+
+function iloczyn_macierzy(matrixA, matrixB) {
+    let bCols = 10;
+    if(matrixB[0].length == undefined ) bCols = 3;
+    else bCols = matrixB[0].length;
+    
+    let matrixResult = [];
+
+    for (var r = 0; r < matrixA.length; ++r) {
+        matrixResult[r] = [];
+        for (var c = 0; c < bCols; ++c) {
+            matrixResult[r][c] = 0;
+            for (var i = 0; i < matrixA[0].length; ++i) {
+                if(matrixB[0].length != undefined ) 
+                    matrixResult[r][c] += matrixA[r][i] * matrixB[i][c];
+                else matrixResult[r][c] += matrixA[r][i] * matrixB[i];
+            }
+        }
+    }
+    return matrixResult;
+}
 
 function onChooseFile(event, onLoadFileHandler) {
     if (typeof window.FileReader !== 'function')
