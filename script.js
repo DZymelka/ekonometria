@@ -175,7 +175,37 @@ function calculate(){
 
     let odchyl_stand_sk_reszt = Math.sqrt(to_piate);
 
-    console.log(odchyl_stand_sk_reszt);
+    //Błędy średnie szacunku parametrów
+    let bledy_srednie_szacunku_par = [];
+    let pier_D2 = [];
+    for(let i = 0; i < XTX_odw.length; i++){
+        bledy_srednie_szacunku_par[i] = [];
+        for(let j = 0; j < XTX_odw.length; j++){
+            bledy_srednie_szacunku_par[i][j] = XTX_odw[i][j] * to_piate;
+
+        }
+        pier_D2[i] = Math.sqrt(bledy_srednie_szacunku_par[i][i]);
+    }
+
+    //Współczynnik determinacji
+    let Yt = [];
+    let Yyes = [];
+    let Ytyes = [];
+    let wsp_det_licznik = 0, wsp_det_mianownik = 0;
+    
+    for(let i = 0; i < macierzY.length; i++){
+        Yt[i] =  KMNK[0][0] * X[0][i] + KMNK[1][0] * X[1][i] + KMNK[2][0];
+        Yyes[i] = macierzY[i] - macierzY_srednia;
+        Ytyes[i] = Yt[i] - macierzY_srednia;
+
+        wsp_det_licznik += Math.pow(Yt[i] - (math.sum(macierzY)/10), 2);
+        wsp_det_mianownik += Math.pow(macierzY[i] - (math.sum(macierzY)/10), 2);
+
+    }
+
+    let wspolczynnik_determinacji = (wsp_det_licznik / wsp_det_mianownik).toFixed(4)* 100;
+
+    console.log(wspolczynnik_determinacji);
     
 }
 
