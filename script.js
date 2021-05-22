@@ -6,6 +6,8 @@ let macierzY = [];
 let tabela_wsp_kor_r0 = [];
 let tabela_wsp_kor_r = [];
 
+let kluczX = [];
+
 function onFileLoad(event) {
     // document.getElementById(elementId).innerText = event.target.result;
     let textByLine = event.target.result.split('\n')
@@ -112,8 +114,97 @@ function calculate(){
     tabela_wsp_kor_r = oblicz_wsp_kor_r(macierzY_srednia, macierzX_srednia);
 
     // Metoda współczynników korelacji wielorakiej (Pawłowskiego)
-    restult = oblicz_wsp_korelacji_wielorakiej();
-    console.log(restult)
+    wskaznik = oblicz_wsp_korelacji_wielorakiej();
+
+    macierz1 = []
+    for(let i = 0; i < macierzX[0].length; i++)
+        macierz1[i] = 1;
+
+    switch (wskaznik) {
+        case 0:
+            kluczX = [macierzX[0], macierzX[1], macierz1] ;
+            klucz = [0, 1];
+            break;
+        case 1:
+            kluczX = [macierzX[0], macierzX[2], macierz1];
+            klucz = [0, 2];
+            break;
+        case 2:
+            kluczX = [macierzX[0], macierzX[3], macierz1];
+            klucz = [0, 3];
+            break;
+        case 3:
+            kluczX = [macierzX[1], macierzX[2], macierz1];
+            klucz = [1, 2];
+            break;
+        case 4:
+            kluczX = [macierzX[1], macierzX[3], macierz1];
+            klucz = [1, 3];
+            break;
+        case 5:
+            kluczX = [macierzX[2], macierzX[3], macierz1];
+            klucz = [2, 3];
+            break;
+        default:
+            console.log('Błąd.');
+            break;
+    }
+
+    XT = math.transpose(kluczX);
+
+    let XTX = iloczyn_macierzy(kluczX, XT);
+
+    let XTX_odw = math.inv([[XTX[0][0], XTX[0][1], XTX[0][2]],
+                    [XTX[1][0], XTX[1][1], XTX[1][2]],
+                    [XTX[2][0], XTX[2][1], XTX[2][2]]]);
+
+    let YT = math.transpose(macierzY);
+
+    let XTY = iloczyn_macierzy(kluczX, macierzY);
+
+
+    console.log(kluczX.length);
+    console.log(XTY);
+    
+}
+
+function iloczyn_macierzy(matrixA, matrixB) {
+    let bCols = 10;
+    if(matrixB[0].length == undefined ) bCols = 3;
+    else bCols = matrixB[0].length;
+    
+    let matrixResult = [];
+
+    for (var r = 0; r < matrixA.length; ++r) {
+        matrixResult[r] = [];
+        for (var c = 0; c < bCols; ++c) {
+            matrixResult[r][c] = 0;
+            for (var i = 0; i < matrixA[0].length; ++i) {
+                if(matrixB[0].length != undefined ) 
+                    matrixResult[r][c] += matrixA[r][i] * matrixB[i][c];
+                else matrixResult[r][c] += matrixA[r][i] * matrixB[i];
+            }
+        }
+    }
+    return matrixResult;
+}
+
+function iloczyn_macierzy2(matrixA, matrixB) {
+    let aNumRows = matrixA.length, aNumCols = matrixA[0].length,
+        bNumRows = matrixB.length, bNumCols = matrixB[0].length;
+    let matrixResult = [];
+
+    for (var r = 0; r < aNumRows; ++r) {
+        matrixResult[r] = [];
+        for (var c = 0; c < 10; ++c) {
+            matrixResult[r][c] = 0;
+            for (var i = 0; i < aNumCols; ++i) {
+                matrixResult[r][c] += matrixA[r][i] * matrixB[i];
+            }
+        }
+    }
+    console.log(matrixResult);
+    return matrixResult;
 }
 
 //Podstawy R, R0 itp
