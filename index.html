@@ -23,10 +23,11 @@
             <div class="row justify-content-center align-items-middle mt-5">
                 <div class="col-4">
                     <h1>Wczytaj plik do obliczeń</h1>
-                    <div class="row mb-5">
+                    <div class="row mb-5 d-flex justify-content-center">
                         <input type='file' onchange='onChooseFile(event, onFileLoad.bind("matrixContent"))' />
                     </div>
-                    <div id="matrixContent" class="matrixContent">
+                    <div id="matrixContent" class="matrixContent row">
+                        <H2>Dane z pliku</H2>
                         <table id="matrixTable" class="matrixTable">
                             <tr>
                                 <th>Y</th>
@@ -38,8 +39,19 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-4">
-                    R/R0
+                <div class="col-4 ">
+                    <div id="matrixContent" class="matrixContent align-self-center">
+                        <div class="row d-flex justify-content-center" >
+                            <H2>R0</H2>
+                            <table id="R0Table" class="matrixTable" style="max-width: 300px;"></table>
+                        </div>
+
+                        <div class="row mt-5 d-flex justify-content-center" >
+                            <H2>R</H2>
+                            <table id="RTable" class="matrixTable" style="max-width: 300px;"></table>
+                        </div>
+                            
+                    </div>
                 </div>
                 <div class="col-4">
                     Wsp korelacji i Równanie modelu

@@ -43,6 +43,7 @@ function wyswietlMatrix(){
     // table.appendChild(tr);
     $("#matrixTable th").remove(); 
     $("#matrixTable tr").remove(); 
+    $("#matrixTable td").remove();
     var table = document.getElementById("matrixTable");
     var tr = document.createElement('tr');   
 
@@ -80,7 +81,67 @@ function wyswietlMatrix(){
 
         table.appendChild(tr);
     });
-    table.style.visibility = 'visible';
+    $(".matrixContent").show();
+
+}
+
+function wyswietlR(){
+    $("#R0Table tr").remove();
+    $("#R0Table th").remove();
+    $("#R0Table td").remove();
+    $("#RTable td").remove();
+    $("#RTable th").remove();
+    let table = document.getElementById("R0Table");
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`Y`);
+    th.appendChild(th_text);
+    table.appendChild(th);
+
+    
+    tabela_wsp_kor_r0.forEach(function(item, index, object) {
+        var tr = document.createElement('tr');   
+        table.appendChild(tr);
+        var td = document.createElement('td');
+        var td_text = document.createTextNode(item.toFixed(4));
+        td.appendChild(td_text);
+        table.appendChild(td);
+    });
+
+    let tableR = document.getElementById("RTable");
+
+    var th = document.createElement('th');
+    tableR.appendChild(th);
+
+    tabela_wsp_kor_r.forEach(function(item, index, object) {
+
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`X${index+1}`);
+        th.appendChild(th_text);
+        tableR.appendChild(th);
+    });
+
+    var tr = document.createElement('tr');   
+    tableR.appendChild(tr);
+
+    tabela_wsp_kor_r.forEach(function(item, index, object) {
+        var tr = document.createElement('tr');   
+
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`X${index+1}`);
+        th.appendChild(th_text);
+        tableR.appendChild(th);
+
+
+        tabela_wsp_kor_r[index].forEach(function(item2, index, object) {
+            var td = document.createElement('td');
+            var td_text = document.createTextNode(item2.toFixed(4));
+            td.appendChild(td_text);
+            tableR.appendChild(td);
+        });
+        tableR.appendChild(tr);
+    });
+    $(".matrixContent").show();
 }
 
 
@@ -109,6 +170,8 @@ function calculate(){
 
     //R0 - współczynnik korelacji
     tabela_wsp_kor_r0 = oblicz_wsp_kor_r0(macierzY_srednia, macierzX_srednia);
+
+    wyswietlR();
 
     //R - współczynnik korelacji
     tabela_wsp_kor_r = oblicz_wsp_kor_r(macierzY_srednia, macierzX_srednia);
@@ -206,6 +269,7 @@ function calculate(){
     let wspolczynnik_determinacji = (wsp_det_licznik / wsp_det_mianownik).toFixed(4)* 100;
 
     console.log(wspolczynnik_determinacji);
+    
     
 }
 
@@ -460,7 +524,3 @@ function onChooseFile(event, onLoadFileHandler) {
     fr.onload = onLoadFileHandler;
     fr.readAsText(file);
 }
-
-$( document ).ready(function() {
-    
-});
