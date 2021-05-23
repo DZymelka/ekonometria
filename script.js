@@ -227,16 +227,19 @@ function calculate(){
 
     let KMNK = iloczyn_macierzy(XTX_odw, XTY)
 
-    console.log(`Y = ${KMNK[0][0]} * X${klucz[0]+1} + ${KMNK[1][0]} * X${klucz[1]+1} + ${KMNK[2][0]}`)
+    // console.log(`Y = ${KMNK[0][0]} * X${klucz[0]+1} + ${KMNK[1][0]} * X${klucz[1]+1} + ${KMNK[2][0]}`);
+    document.getElementById("rownanie_modelu").innerHTML = `Y = ${KMNK[0][0].toFixed(4)} * X${klucz[0]+1} + ${KMNK[1][0].toFixed(4)} * X${klucz[1]+1} + ${KMNK[2][0].toFixed(4)}`; 
 
     // Odchylenei standardowe składnika resztowego
     to_pierwsze = math.multiply(macierzY, YT);  
     to_drugie = math.multiply(X, YT);  
     to_trzecie = math.multiply([KMNK[0][0], KMNK[1][0], KMNK[2][0]], to_drugie);
     to_czwarte =   Math.abs(to_trzecie - to_pierwsze);
-    to_piate = to_czwarte/7;
+    wariancja_sklad_reszt = to_czwarte/7;
+    document.getElementById("wariancja_sklad_reszt").innerHTML = `${wariancja_sklad_reszt.toFixed(4)}`; 
 
-    let odchyl_stand_sk_reszt = Math.sqrt(to_piate);
+    let odchyl_stand_sk_reszt = Math.sqrt(wariancja_sklad_reszt);
+    document.getElementById("odchylenie_standardowe_sklad_reszt").innerHTML = `${odchyl_stand_sk_reszt.toFixed(4)}`; 
 
     //Błędy średnie szacunku parametrów
     let bledy_srednie_szacunku_par = [];
@@ -244,11 +247,14 @@ function calculate(){
     for(let i = 0; i < XTX_odw.length; i++){
         bledy_srednie_szacunku_par[i] = [];
         for(let j = 0; j < XTX_odw.length; j++){
-            bledy_srednie_szacunku_par[i][j] = XTX_odw[i][j] * to_piate;
+            bledy_srednie_szacunku_par[i][j] = XTX_odw[i][j] * wariancja_sklad_reszt;
 
         }
         pier_D2[i] = Math.sqrt(bledy_srednie_szacunku_par[i][i]);
     }
+
+    document.getElementById("bledy_srednie_szacunku_parametrow").innerHTML = `(a2 : ${(pier_D2[0]).toFixed(4)}) (a1 : ${(pier_D2[1]).toFixed(4)}) (a0: ${(pier_D2[2]).toFixed(4)})`; 
+    document.getElementById("wspolczynnik_zmiennosci_losowej").innerHTML = `${(odchyl_stand_sk_reszt*100/macierzY_srednia).toFixed(2)}%`; 
 
     //Współczynnik determinacji
     let Yt = [];
@@ -267,8 +273,8 @@ function calculate(){
     }
 
     let wspolczynnik_determinacji = (wsp_det_licznik / wsp_det_mianownik).toFixed(4)* 100;
-
-    console.log(wspolczynnik_determinacji);
+    
+    document.getElementById("wspolczynnik_determinancji").innerHTML = `${wspolczynnik_determinacji.toFixed(2)}%`; 
     
     
 }
