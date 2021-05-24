@@ -1,41 +1,37 @@
-body {
-    font-size: 20px;
-}
-
-.container {
+/* .container {
     margin-top: 30px;
-}
+} */
 
 .matrixContent{
     /* visibility: none; */
-    width: 100%;
-    min-height: 200px;
+    /* width: 100%; */
+    /* min-height: 200px; */
     display: none;
     text-align: center;
 }
 
-.matrixTable{
+.table{
     align-self: center;
-    width: 100%; 
+    /* width: 100%;  */
     border-collapse: collapse;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.matrixTable th {
+.table th {
     background-color: #d2d2d2;
     text-align: center;
     vertical-align: middle;
     height: 40px;
-    min-width: 80px;
+    min-width: 40px;
 }
-.matrixTable tr {
+.table tr {
     text-align: center;
     /* height: 20px; */
     vertical-align: middle;
     border-top: solid 1px #d2d2d2; 
     border-bottom: solid 1px #d2d2d2;
 }
-.matrixTable td {
+.table td {
     text-align: center;
     vertical-align: middle;
     border-top: solid 1px #d2d2d2; 
@@ -44,6 +40,7 @@ body {
     height: 40px;
 }
 
-.col-4 {
-    padding: 100px;
+
+.row {
+    padding: 10px;
 }

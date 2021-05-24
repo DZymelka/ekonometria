@@ -444,6 +444,7 @@ function oblicz_wsp_korelacji_wielorakiej(){
     W[4] = [[1, K[4][0], K[4][1]], [K[4][0], 1, R[4][0][1]], [K[4][1], R[4][0][1], 1]];
     W[5] = [[1, K[5][0], K[5][1]], [K[5][0], 1, R[5][0][1]], [K[5][1], R[5][0][1], 1]];
 
+
     
     for(let i = 0; i < R.length; i++) {
         detR[i] = Math.abs(oblicz_wyznacznik(R[i], R[i].length));
@@ -460,9 +461,58 @@ function oblicz_wsp_korelacji_wielorakiej(){
         E[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
     }
 
+
+    wyswietl_korelacje(E);
+
     let wskaznik = E.indexOf(Math.max(...E));
 
     return wskaznik;
+}
+
+function wyswietl_korelacje(korelacje){
+    console.log(korelacje)
+    let KorelationTable = document.getElementById("KorelationTable");
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K1 = X1, X2`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K2 = X1, X3`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K3 = X1, X4`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K4 = X2, X3`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K5 = X2, X4`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var th = document.createElement('th');
+    var th_text = document.createTextNode(`K6 = X3, X4`);
+    th.appendChild(th_text);
+    KorelationTable.appendChild(th);
+
+    var tr = document.createElement('tr');   
+    KorelationTable.appendChild(tr);
+
+    korelacje.forEach(function(item, index, object) {
+
+        var td = document.createElement('td');
+        var td_text = document.createTextNode(item.toFixed(4));
+        td.appendChild(td_text);
+        KorelationTable.appendChild(td);
+    });
 }
 
 function oblicz_wyznacznik(macierz, n){
