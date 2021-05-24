@@ -44,3 +44,7 @@
 .row {
     padding: 10px;
 }
+
+.form-check .form-check-input{
+    float: none;
+}

@@ -28,10 +28,22 @@
                         <input type='file' onchange='onChooseFile(event, onFileLoad.bind("matrixContent"))' />
                     </div>
                     <div id="matrixContent" class="matrixContent row">
-                        <H2>Wybór ilości zmiennych objaśniającyh</H2>
+                        <H2>Ilość zmiennych</H2>
                         <div>
-                            <input type="radio" name="iloscZmiennych" id="iloscZmiennych_2" checked="checked" value="2">2 <br/>
-                            <input type="radio" name="iloscZmiennych" id="iloscZmiennych_3" value="3">3
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="iloscZmiennych" id="iloscZmiennych_2" value="2" checked>
+                                <label class="form-check-label" for="iloscZmiennych_2">
+                                  2 zmienne
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="iloscZmiennych" id="iloscZmiennych_3" value="3">
+                                <label class="form-check-label" for="iloscZmiennych_3">
+                                  3 zmienne
+                                </label>
+                              </div>
+
                         </div>
                         <H2>Dane z pliku</H2>
                         <table id="matrixTable" class="table">
