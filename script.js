@@ -527,11 +527,11 @@ function oblicz_wsp_korelacji_wielorakiej(){
 
         R[7] = [[1, tabela_wsp_kor_r[0][1], tabela_wsp_kor_r[0][3]], 
                 [tabela_wsp_kor_r[0][1], 1, tabela_wsp_kor_r[1][3]],
-                [tabela_wsp_kor_r[0][3], tabela_wsp_kor_r[0][2], 1]];
+                [tabela_wsp_kor_r[0][3], tabela_wsp_kor_r[1][3], 1]];
 
         R[8] = [[1, tabela_wsp_kor_r[0][2], tabela_wsp_kor_r[0][3]], 
                 [tabela_wsp_kor_r[0][2], 1, tabela_wsp_kor_r[2][3]],
-                [tabela_wsp_kor_r[0][3], tabela_wsp_kor_r[0][3], 1]];
+                [tabela_wsp_kor_r[0][3], tabela_wsp_kor_r[2][3], 1]];
 
         R[9] = [[1, tabela_wsp_kor_r[1][2], tabela_wsp_kor_r[1][3]], 
                 [tabela_wsp_kor_r[1][2], 1, tabela_wsp_kor_r[2][3]],
@@ -559,8 +559,8 @@ function oblicz_wsp_korelacji_wielorakiej(){
                 [K[8][1], R[8][0][1], 1, R[8][1][2]], 
                 [K[8][2], R[8][0][2], R[8][1][2], 1]];
 
-        W[9] = [[1, K[9][1], K[9][1], K[9][2]], 
-                [K[9][1], 1, R[9][0][1], R[9][0][2]], 
+        W[9] = [[1, K[9][0], K[9][1], K[9][2]], 
+                [K[9][0], 1, R[9][0][1], R[9][0][2]], 
                 [K[9][1], R[9][0][1], 1, R[9][1][2]], 
                 [K[9][2], R[9][0][2], R[9][1][2], 1]];
 
