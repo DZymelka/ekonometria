@@ -275,9 +275,9 @@ function calculate(){
 
     // console.log(`Y = ${KMNK[0][0]} * X${klucz[0]+1} + ${KMNK[1][0]} * X${klucz[1]+1} + ${KMNK[2][0]}`);
     if(iloscZmiennych == 3){
-        document.getElementById("rownanie_modelu").innerHTML = `Y = ${KMNK[0].toFixed(4)} * X${klucz[2]+1} + ${KMNK[1].toFixed(4)} * X${klucz[1]+1} + ${KMNK[2].toFixed(4)} * X${klucz[0]+1} + ${KMNK[3].toFixed(4)}`; 
+        document.getElementById("rownanie_modelu").innerHTML = `Y = ${KMNK[0].toFixed(4)} * X${klucz[0]+1} + ${KMNK[1].toFixed(4)} * X${klucz[1]+1} + ${KMNK[2].toFixed(4)} * X${klucz[2]+1} + ${KMNK[3].toFixed(4)}`; 
     } else {
-        document.getElementById("rownanie_modelu").innerHTML = `Y = ${KMNK[0].toFixed(4)} * X${klucz[1]+1} + ${KMNK[1].toFixed(4)} * X${klucz[0]+1} + ${KMNK[2].toFixed(4)}`; 
+        document.getElementById("rownanie_modelu").innerHTML = `Y = ${KMNK[0].toFixed(4)} * X${klucz[0]+1} + ${KMNK[1].toFixed(4)} * X${klucz[1]+1} + ${KMNK[2].toFixed(4)}`; 
     }
 
     // Odchylenei standardowe składnika resztowego
@@ -289,7 +289,12 @@ function calculate(){
         to_trzecie = math.multiply([KMNK[0], KMNK[1], KMNK[2]], to_drugie);
 
     to_czwarte =   Math.abs(to_trzecie - to_pierwsze);
-    wariancja_sklad_reszt = to_czwarte/7;
+    
+    if(iloscZmiennych == 3)
+        wariancja_sklad_reszt = to_czwarte/6;
+    else 
+        wariancja_sklad_reszt = to_czwarte/7;
+        
     document.getElementById("wariancja_sklad_reszt").innerHTML = `${wariancja_sklad_reszt.toFixed(4)}`; 
 
     let odchyl_stand_sk_reszt = Math.sqrt(wariancja_sklad_reszt);
@@ -308,9 +313,9 @@ function calculate(){
     }
 
     if(iloscZmiennych == 3) {
-        document.getElementById("bledy_srednie_szacunku_parametrow").innerHTML = `(a${klucz[2]+1} : ${(pier_D2[0]).toFixed(4)}) (a${klucz[1]+1} : ${(pier_D2[1]).toFixed(4)}) (a${klucz[0]+1} : ${(pier_D2[2]).toFixed(4)}) (a0: ${(pier_D2[3]).toFixed(4)})`; 
+        document.getElementById("bledy_srednie_szacunku_parametrow").innerHTML = `(a${klucz[0]+1} : ${(pier_D2[0]).toFixed(4)}) (a${klucz[1]+1} : ${(pier_D2[1]).toFixed(4)}) (a${klucz[2]+1} : ${(pier_D2[2]).toFixed(4)}) (a0: ${(pier_D2[3]).toFixed(4)})`; 
     } else {
-        document.getElementById("bledy_srednie_szacunku_parametrow").innerHTML = `(a${klucz[1]+1} : ${(pier_D2[0]).toFixed(4)}) (a${klucz[0]+1} : ${(pier_D2[1]).toFixed(4)}) (a0: ${(pier_D2[2]).toFixed(4)})`; 
+        document.getElementById("bledy_srednie_szacunku_parametrow").innerHTML = `(a${klucz[0]+1} : ${(pier_D2[0]).toFixed(4)}) (a${klucz[1]+1} : ${(pier_D2[1]).toFixed(4)}) (a0: ${(pier_D2[2]).toFixed(4)})`; 
     }
     document.getElementById("wspolczynnik_zmiennosci_losowej").innerHTML = `${(odchyl_stand_sk_reszt*100/macierzY_srednia).toFixed(2)}%`; 
 
@@ -482,35 +487,53 @@ function oblicz_wsp_kor_r(){
 
 function oblicz_wsp_korelacji_wielorakiej(){
     
-    let K = [], R = [], W = [], detW = [], detR = [];
-    K[0] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[1]];
-    K[1] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[2]];
-    K[2] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[3]];
-    K[3] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[2]];
-    K[4] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[3]];
-    K[5] = [tabela_wsp_kor_r0[2], tabela_wsp_kor_r0[3]];
+    let K = [], R = [], W = [], detW = [], detR = [], E = [];
+    let E_kor = [];
     
-
-
-
+    if(iloscZmiennych == 2) {
+        K[0] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[1]];
+        K[1] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[2]];
+        K[2] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[3]];
+        K[3] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[2]];
+        K[4] = [tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[3]];
+        K[5] = [tabela_wsp_kor_r0[2], tabela_wsp_kor_r0[3]];
+        
     
-    R[0] = [[1, tabela_wsp_kor_r[0][1]], [tabela_wsp_kor_r[0][1], 1]];
-    R[1] = [[1, tabela_wsp_kor_r[0][2]], [tabela_wsp_kor_r[0][2], 1]];
-    R[2] = [[1, tabela_wsp_kor_r[0][3]], [tabela_wsp_kor_r[0][3], 1]];
-    R[3] = [[1, tabela_wsp_kor_r[1][2]], [tabela_wsp_kor_r[1][2], 1]];
-    R[4] = [[1, tabela_wsp_kor_r[1][3]], [tabela_wsp_kor_r[1][3], 1]];
-    R[5] = [[1, tabela_wsp_kor_r[2][3]], [tabela_wsp_kor_r[2][3], 1]];
+    
+    
+        
+        R[0] = [[1, tabela_wsp_kor_r[0][1]], [tabela_wsp_kor_r[0][1], 1]];
+        R[1] = [[1, tabela_wsp_kor_r[0][2]], [tabela_wsp_kor_r[0][2], 1]];
+        R[2] = [[1, tabela_wsp_kor_r[0][3]], [tabela_wsp_kor_r[0][3], 1]];
+        R[3] = [[1, tabela_wsp_kor_r[1][2]], [tabela_wsp_kor_r[1][2], 1]];
+        R[4] = [[1, tabela_wsp_kor_r[1][3]], [tabela_wsp_kor_r[1][3], 1]];
+        R[5] = [[1, tabela_wsp_kor_r[2][3]], [tabela_wsp_kor_r[2][3], 1]];
+    
+    
+        W[0] = [[1, K[0][0], K[0][1]], 
+                [K[0][0], 1, R[0][0][1]], 
+                [K[0][1], R[0][0][1], 1]];
+        W[1] = [[1, K[1][0], K[1][1]], [K[1][0], 1, R[1][0][1]], [K[1][1], R[1][0][1], 1]];
+        W[2] = [[1, K[2][0], K[2][1]], [K[2][0], 1, R[2][0][1]], [K[2][1], R[2][0][1], 1]];
+        W[3] = [[1, K[3][0], K[3][1]], [K[3][0], 1, R[3][0][1]], [K[3][1], R[3][0][1], 1]];
+        W[4] = [[1, K[4][0], K[4][1]], [K[4][0], 1, R[4][0][1]], [K[4][1], R[4][0][1], 1]];
+        W[5] = [[1, K[5][0], K[5][1]], [K[5][0], 1, R[5][0][1]], [K[5][1], R[5][0][1], 1]];
 
 
-    W[0] = [[1, K[0][0], K[0][1]], 
-            [K[0][0], 1, R[0][0][1]], 
-            [K[0][1], R[0][0][1], 1]];
-    W[1] = [[1, K[1][0], K[1][1]], [K[1][0], 1, R[1][0][1]], [K[1][1], R[1][0][1], 1]];
-    W[2] = [[1, K[2][0], K[2][1]], [K[2][0], 1, R[2][0][1]], [K[2][1], R[2][0][1], 1]];
-    W[3] = [[1, K[3][0], K[3][1]], [K[3][0], 1, R[3][0][1]], [K[3][1], R[3][0][1], 1]];
-    W[4] = [[1, K[4][0], K[4][1]], [K[4][0], 1, R[4][0][1]], [K[4][1], R[4][0][1], 1]];
-    W[5] = [[1, K[5][0], K[5][1]], [K[5][0], 1, R[5][0][1]], [K[5][1], R[5][0][1], 1]];
+        for(let i = 0; i < R.length; i++) {
+            detR[i] = Math.abs(oblicz_wyznacznik(R[i], R[i].length));
+        }
 
+        for(let i = 0; i < W.length; i++){
+            detW[i] = Math.abs(oblicz_wyznacznik(W[i], W[i].length));
+        }
+        
+        //Współczynnik korelacji        
+        for(let i = 0; i < W.length; i++){
+            E[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
+            E_kor[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
+        }
+    }
     if(iloscZmiennych == 3) {
         K[6] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[2]];
         K[7] = [tabela_wsp_kor_r0[0], tabela_wsp_kor_r0[1], tabela_wsp_kor_r0[3]];
@@ -564,30 +587,25 @@ function oblicz_wsp_korelacji_wielorakiej(){
                 [K[9][1], R[9][0][1], 1, R[9][1][2]], 
                 [K[9][2], R[9][0][2], R[9][1][2], 1]];
 
-    }
-
-
-
+        
+        for(let i = 6; i < R.length; i++) {
+            detR[i] = Math.abs(oblicz_wyznacznik(R[i], R[i].length));
+        }
     
-    for(let i = 0; i < R.length; i++) {
-        detR[i] = Math.abs(oblicz_wyznacznik(R[i], R[i].length));
+        for(let i = 6; i < W.length; i++){
+            detW[i] = Math.abs(oblicz_wyznacznik(W[i], W[i].length));
+        }
+        
+        //Współczynnik korelacji        
+        for(let i = 6; i < W.length; i++){
+            E[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
+            E_kor[i-6] = Math.sqrt(1 - ( detW[i] / detR[i]));
+        }
     }
-
-    for(let i = 0; i < W.length; i++){
-        detW[i] = Math.abs(oblicz_wyznacznik(W[i], W[i].length));
-    }
-    
-    //Współczynnik korelacji
-    let E = [];
-    
-    for(let i = 0; i < W.length; i++){
-        E[i] = Math.sqrt(1 - ( detW[i] / detR[i]));
-    }
-
 
     wyswietl_korelacje(E);
 
-    let wskaznik = E.indexOf(Math.max(...E));
+    let wskaznik = E.indexOf(Math.max(...E_kor));
 
     return wskaznik;
 }
@@ -598,44 +616,45 @@ function wyswietl_korelacje(korelacje){
     $("#KorelationTable td").remove(); 
 
     let KorelationTable = document.getElementById("KorelationTable");
+    if(iloscZmiennych == 2) {
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K1 = X1, X2`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K1 = X1, X2`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K2 = X1, X3`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K2 = X1, X3`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K3 = X1, X4`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K3 = X1, X4`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K4 = X2, X3`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K4 = X2, X3`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K5 = X2, X4`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K5 = X2, X4`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
+        var th = document.createElement('th');
+        var th_text = document.createTextNode(`K6 = X3, X4`);
+        th.appendChild(th_text);
+        KorelationTable.appendChild(th);
+        var tr = document.createElement('tr');   
+        KorelationTable.appendChild(tr);
 
-    var th = document.createElement('th');
-    var th_text = document.createTextNode(`K6 = X3, X4`);
-    th.appendChild(th_text);
-    KorelationTable.appendChild(th);
-    var tr = document.createElement('tr');   
-    KorelationTable.appendChild(tr);
-
-    for(let i = 0; i < 6; i++) {
-        var td = document.createElement('td');
-        var td_text = document.createTextNode(korelacje[i].toFixed(4));
-        td.appendChild(td_text);
-        KorelationTable.appendChild(td);
+        for(let i = 0; i < 6; i++) {
+            var td = document.createElement('td');
+            var td_text = document.createTextNode(korelacje[i].toFixed(4));
+            td.appendChild(td_text);
+            KorelationTable.appendChild(td);
+        }
     }
 
     if(iloscZmiennych == 3) {
@@ -704,29 +723,6 @@ function oblicz_wyznacznik(macierz, n){
     return det;
 }
 //(koniec)Metoda współczynników korelacji wielorakiej (Pawłowskiego)
-
-
-
-function iloczyn_macierzy(matrixA, matrixB) {
-    let bCols = 10;
-    if(matrixB[0].length == undefined ) bCols = 3;
-    else bCols = matrixB[0].length;
-    
-    let matrixResult = [];
-
-    for (var r = 0; r < matrixA.length; ++r) {
-        matrixResult[r] = [];
-        for (var c = 0; c < bCols; ++c) {
-            matrixResult[r][c] = 0;
-            for (var i = 0; i < matrixA[0].length; ++i) {
-                if(matrixB[0].length != undefined ) 
-                    matrixResult[r][c] += matrixA[r][i] * matrixB[i][c];
-                else matrixResult[r][c] += matrixA[r][i] * matrixB[i];
-            }
-        }
-    }
-    return matrixResult;
-}
 
 function onChooseFile(event, onLoadFileHandler) {
     if (typeof window.FileReader !== 'function')
